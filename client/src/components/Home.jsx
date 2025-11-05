@@ -3,9 +3,18 @@ import "./styles.css";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import CardsData from "./CardData";
+import {addToCart} from '../redux/cartSlice';
+import { useDispatch } from "react-redux";
 
 const Home = () => {
   const [cardData, useCardData] = useState(CardsData);
+
+  const dispatch = useDispatch();
+
+  //add to Cart
+  const send = (e)=>{
+    dispatch(addToCart(e));
+  }
 
   return (
     <>
@@ -37,12 +46,9 @@ const Home = () => {
                     <img src={element.arrimg} className="limg" alt="" />
                     <Button
                       style={{
-                        width: "150px",
-                        background: "#ff3054db",
-                        border: "none",
-                      }}
-                      variant="outline-light"
-                      className="mt-2 mb-2"
+                        width: "150px",background: "#ff3054db",border: "none",
+                      }}variant="outline-light" className="mt-2 mb-2"
+                      onClick={()=>send(element)}
                     >
                       Add To Cart
                     </Button>
