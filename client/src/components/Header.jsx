@@ -7,7 +7,6 @@ import {NavLink } from 'react-router-dom';
 const Header = () => {
 
   const {carts} = useSelector((state)=>state.allCart);
-  console.log(carts);
 
   return (
     <>
