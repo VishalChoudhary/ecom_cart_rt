@@ -1,7 +1,7 @@
 import React from "react";
 import "./cartStyles.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../redux/cartSlice";
+import { addToCart, removeFromCart,removeSingleItem,emptyCart } from "../redux/cartSlice";
 
 const CartDetails = () => {
   
@@ -12,6 +12,20 @@ const CartDetails = () => {
     dispatch(addToCart(e));
   }
 
+  //remove particular element from cart
+  const handleDeleteElement = (e) =>{
+    dispatch(removeFromCart(e));
+  }
+
+  //remove Single element(qunatity)
+  const handleDecrement = (e) =>{
+    dispatch(removeSingleItem(e));
+  };
+
+  const handleEmptyCart = () =>{
+    dispatch(emptyCart());
+  };
+
   return (
     <>
       <div className="row justify-content-center m-0">
@@ -21,7 +35,7 @@ const CartDetails = () => {
               <div className="card-header-flex">
                 <h5 className="text-white m-0">Cart Calculation{carts.length>0 ? `(${carts.length})`: ""}</h5>
                 {carts.length > 0 ? (
-                  <button className="btn btn-danger mt-0 btn-sm">
+                  <button className="btn btn-danger mt-0 btn-sm" onClick={handleEmptyCart}>
                     <i className="fa fa-trash-alt mr-2"></i>
                     <span>Empty</span>
                   </button>
@@ -64,7 +78,7 @@ const CartDetails = () => {
                         <>
                           <tr>
                             <td>
-                              <button className="prdct-delete">
+                              <button className="prdct-delete" onClick={()=>handleDeleteElement(data.id)}>
                                 <i className="fa fa-trash-alt mr-2"></i>
                               </button>
                             </td>
@@ -73,7 +87,8 @@ const CartDetails = () => {
                             <td>{data.price}</td>
                             <td>
                               <div className="prdct-qty-container">
-                                <button className="prdct-qty-btn" type="button">
+                                <button className="prdct-qty-btn" type="button" 
+                                  onClick={data.qnty <=1 ? ()=>handleDeleteElement(data.id) : ()=>handleDecrement(data)}>
                                   <i className="fa fa-minus"></i>
                                 </button>
                                 <input type="text" name="" id=""  className="qty-input-box" value={data.qnty} disabled/>
