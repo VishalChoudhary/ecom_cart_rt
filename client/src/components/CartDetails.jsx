@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./cartStyles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart,removeSingleItem,emptyCart } from "../redux/cartSlice";
@@ -6,6 +6,9 @@ import { addToCart, removeFromCart,removeSingleItem,emptyCart } from "../redux/c
 const CartDetails = () => {
   
   const {carts} = useSelector((state)=>state.allCart);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+ 
   const dispatch = useDispatch();
   //add to cart
   const handleIncrement = (e) =>{
@@ -25,6 +28,32 @@ const CartDetails = () => {
   const handleEmptyCart = () =>{
     dispatch(emptyCart());
   };
+
+  //total price function
+  const total = () =>{
+    let totalPrice = 0;
+    carts.map((itm,ind)=>{
+      totalPrice = itm.price*itm.qnty+totalPrice;
+    })
+    setTotalPrice(totalPrice);
+  }
+  
+  //total quantity
+  const countQuantity = () =>{
+    let totalQuantity = 0;
+    carts.map((itm,ind)=>{
+      totalQuantity = itm.qnty+totalQuantity;
+    })
+    setTotalQuantity(totalQuantity);
+  }
+
+  useEffect(()=>{
+    total();
+  },[carts]);
+  
+  useEffect(()=>{
+    countQuantity();
+  },[carts]);
 
   return (
     <>
@@ -109,8 +138,8 @@ const CartDetails = () => {
                     <tr>
                       <th>&nbsp;</th>
                       <th colSpan={3}>&nbsp;</th>
-                      <th>Items In Cart <span className='ml-2 mr-2'>:</span><span className='text-danger'>4</span></th>
-                      <th className='text-right'>Total Price<span className='ml-2 mr-2'>:</span><span className='text-danger'>₹ 400</span></th>
+                      <th>Items In Cart <span className='ml-2 mr-2'>:</span><span className='text-danger'>{totalQuantity}</span></th>
+                      <th className='text-right'>Total Price<span className='ml-2 mr-2'>:</span><span className='text-danger'>₹{totalPrice}</span></th>
                     </tr>
                   </tfoot>
                 </table>
